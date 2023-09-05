@@ -1,3 +1,4 @@
+All the code regarding the drag and drop functionality comes from here: https://github.com/soooji/react-multiple-containers-dnd-example/tree/main/
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
