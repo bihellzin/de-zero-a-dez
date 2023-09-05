@@ -18,7 +18,7 @@ export const List = forwardRef<HTMLUListElement, Props>(
         style={
           {
             ...style,
-            "--columns": columns,
+            "--columns": columns
           } as React.CSSProperties
         }
         className={classNames(styles.List, horizontal && styles.horizontal)}

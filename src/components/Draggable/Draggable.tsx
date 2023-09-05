@@ -8,14 +8,14 @@ import { Handle } from "../Item/components/Handle";
 import {
   draggable,
   draggableHorizontal,
-  draggableVertical,
+  draggableVertical
 } from "./draggable-svg";
 import styles from "./Draggable.module.scss";
 
 export enum Axis {
   All,
   Vertical,
-  Horizontal,
+  Horizontal
 }
 
 interface Props {
@@ -58,7 +58,7 @@ export const Draggable = forwardRef<HTMLButtonElement, Props>(
           {
             ...style,
             "--translate-x": `${transform?.x ?? 0}px`,
-            "--translate-y": `${transform?.y ?? 0}px`,
+            "--translate-y": `${transform?.y ?? 0}px`
           } as React.CSSProperties
         }
       >

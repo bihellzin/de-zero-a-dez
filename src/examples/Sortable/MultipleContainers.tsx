@@ -170,18 +170,10 @@ export function MultipleContainers({
   const [items, setItems] = useState<Items>(
     () =>
       initialItems ?? {
-        0: createRange(itemCount, (index) => `0-${index + 1}`),
-        1: createRange(itemCount, (index) => `1-${index + 1}`),
-        2: createRange(itemCount, (index) => `2-${index + 1}`),
-        3: createRange(itemCount, (index) => `3-${index + 1}`),
-        4: createRange(itemCount, (index) => `4-${index + 1}`),
-        5: createRange(itemCount, (index) => `5-${index + 1}`),
-        6: createRange(itemCount, (index) => `6-${index + 1}`),
-        7: createRange(itemCount, (index) => `7-${index + 1}`),
-        8: createRange(itemCount, (index) => `8-${index + 1}`),
-        9: createRange(itemCount, (index) => `9-${index + 1}`),
-        10: createRange(itemCount, (index) => `10-${index + 1}`),
-        root: createRange(itemCount, (index) => `root-${index + 1}`),
+        0: createRange(0, (index) => `0-${index + 1}`),
+        1: createRange(0, (index) => `1-${index + 1}`),
+        2: createRange(0, (index) => `2-${index + 1}`),
+        3: createRange(10, (index) => `3-${index + 1}`),
       }
   );
   const [containers, setContainers] = useState(
@@ -306,7 +298,6 @@ export function MultipleContainers({
       recentlyMovedToNewContainer.current = false;
     });
   }, [items]);
-  console.log(containers);
 
   return (
     <DndContext
@@ -454,26 +445,27 @@ export function MultipleContainers({
       onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
-      <SortableContext
-        items={[...containers, PLACEHOLDER_ID]}
-        strategy={
-          vertical ? verticalListSortingStrategy : horizontalListSortingStrategy
-        }
+      <div
+        style={{
+          display: "inline-grid",
+          boxSizing: "border-box",
+          padding: 20,
+          gridAutoFlow: vertical ? "row" : "column",
+        }}
       >
-        <div
-          style={{
-            display: "inline-grid",
-            boxSizing: "border-box",
-            gridAutoFlow: vertical ? "row" : "column",
-            padding: 8,
-            gap: 8,
-          }}
+        <SortableContext
+          items={[...containers, PLACEHOLDER_ID]}
+          strategy={
+            vertical
+              ? verticalListSortingStrategy
+              : horizontalListSortingStrategy
+          }
         >
-          {containers.slice(0, containers.length - 1).map((containerId) => (
-            <Container
+          {containers.map((containerId) => (
+            <DroppableContainer
               key={containerId}
               id={containerId}
-              label={minimal ? undefined : `${containerId}`}
+              label={minimal ? undefined : `Column ${containerId}`}
               columns={columns}
               items={items[containerId]}
               scrollable={scrollable}
@@ -499,46 +491,21 @@ export function MultipleContainers({
                   );
                 })}
               </SortableContext>
-            </Container>
+            </DroppableContainer>
           ))}
-        </div>
-        <div
-          style={{
-            padding: 8,
-          }}
-        >
-          <Container
-            key={"root"}
-            id={"root"}
-            label={minimal ? undefined : `Column ${"root"}`}
-            columns={columns}
-            items={items["root"]}
-            scrollable={scrollable}
-            style={containerStyle}
-            unstyled={minimal}
-            onRemove={() => handleRemove("root")}
-          >
-            <SortableContext items={items["root"]} strategy={strategy}>
-              {items["root"].map((value, index) => {
-                return (
-                  <SortableItem
-                    disabled={isSortingContainer}
-                    key={value}
-                    id={value}
-                    index={index}
-                    handle={handle}
-                    style={getItemStyles}
-                    wrapperStyle={wrapperStyle}
-                    renderItem={renderItem}
-                    containerId={"root"}
-                    getIndex={getIndex}
-                  />
-                );
-              })}
-            </SortableContext>
-          </Container>
-        </div>
-      </SortableContext>
+          {minimal ? undefined : (
+            <DroppableContainer
+              id={PLACEHOLDER_ID}
+              disabled={isSortingContainer}
+              items={empty}
+              onClick={handleAddColumn}
+              placeholder
+            >
+              + Add column
+            </DroppableContainer>
+          )}
+        </SortableContext>
+      </div>
       {createPortal(
         <DragOverlay adjustScale={adjustScale} dropAnimation={dropAnimation}>
           {activeId

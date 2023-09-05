@@ -90,7 +90,7 @@ export const Item = React.memo(
           style,
           transform,
           transition,
-          value,
+          value
         })
       ) : (
         <li
@@ -119,7 +119,7 @@ export const Item = React.memo(
                 ? `${transform.scaleY}`
                 : undefined,
               "--index": index,
-              "--color": color,
+              "--color": color
             } as React.CSSProperties
           }
           ref={ref}
