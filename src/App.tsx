@@ -9,6 +9,7 @@ export default function App() {
         itemCount={5}
         strategy={rectSortingStrategy}
         vertical={false}
+        columnCreationEnabled={false}
       />
     </div>
   );

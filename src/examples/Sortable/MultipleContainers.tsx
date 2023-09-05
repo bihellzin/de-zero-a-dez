@@ -120,6 +120,7 @@ interface Props {
   adjustScale?: boolean;
   cancelDrop?: CancelDrop;
   columns?: number;
+  columnCreationEnabled?: boolean;
   containerStyle?: React.CSSProperties;
   coordinateGetter?: KeyboardCoordinateGetter;
   getItemStyles?(args: {
@@ -166,6 +167,7 @@ export function MultipleContainers({
   trashable = false,
   vertical = false,
   scrollable,
+  columnCreationEnabled = false,
 }: Props) {
   const [items, setItems] = useState<Items>(
     () =>
@@ -493,7 +495,7 @@ export function MultipleContainers({
               </SortableContext>
             </DroppableContainer>
           ))}
-          {minimal ? undefined : (
+          {columnCreationEnabled ? (
             <DroppableContainer
               id={PLACEHOLDER_ID}
               disabled={isSortingContainer}
@@ -503,7 +505,7 @@ export function MultipleContainers({
             >
               + Add column
             </DroppableContainer>
-          )}
+          ) : undefined}
         </SortableContext>
       </div>
       {createPortal(
