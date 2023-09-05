@@ -18,7 +18,8 @@
   ul {
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: repeat(var(--columns, 1), 1fr);
+    // grid-template-columns: repeat(var(--columns, 1), 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     list-style: none;
     padding: 20px;
     margin: 0;
@@ -92,6 +93,8 @@
 
 .Actions {
   display: flex;
+  align-items: center;
+  gap: 8px;
 
   > *:first-child:not(:last-child) {
     opacity: 0;
