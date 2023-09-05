@@ -2,6 +2,11 @@ import React, { useEffect } from "react";
 import classNames from "classnames";
 import type { DraggableSyntheticListeners } from "@dnd-kit/core";
 import type { Transform } from "@dnd-kit/utilities";
+import Dinamite from "../../assets/dinamite.jpeg";
+import Zico2 from "../../assets/Zico2.jpg";
+import Zico3 from "../../assets/Zico3.webp";
+import Zico4 from "../../assets/Zico.webp";
+import Zico from "../../assets/zico.jpeg";
 
 import { Handle, Remove } from "./components";
 
@@ -24,6 +29,7 @@ export interface Props {
   transition?: string | null;
   wrapperStyle?: React.CSSProperties;
   value: React.ReactNode;
+  backgroundImage?: string;
   onRemove?(): void;
   renderItem?(args: {
     dragOverlay: boolean;
@@ -90,7 +96,7 @@ export const Item = React.memo(
           style,
           transform,
           transition,
-          value
+          value,
         })
       ) : (
         <li
@@ -119,7 +125,7 @@ export const Item = React.memo(
                 ? `${transform.scaleY}`
                 : undefined,
               "--index": index,
-              "--color": color
+              "--color": color,
             } as React.CSSProperties
           }
           ref={ref}
@@ -133,13 +139,38 @@ export const Item = React.memo(
               disabled && styles.disabled,
               color && styles.color
             )}
-            style={style}
+            style={{
+              ...style,
+              backgroundImage: `url(${Dinamite})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              height: 100,
+              width: 100,
+              minWidth: 100,
+              position: "relative",
+            }}
             data-cypress="draggable-item"
             {...(!handle ? listeners : undefined)}
             {...props}
             tabIndex={!handle ? 0 : undefined}
           >
-            {value}
+            <div
+              style={{
+                color: "white",
+                width: "100%",
+                position: "absolute",
+                bottom: 0,
+                backgroundColor: "rgba(0,0,0,0.6)",
+                textTransform: "uppercase",
+                height: 24,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "bold",
+              }}
+            >
+              <p style={{ margin: 0 }}>{value}</p>
+            </div>
             <span className={styles.Actions}>
               {onRemove ? (
                 <Remove className={styles.Remove} onClick={onRemove} />
