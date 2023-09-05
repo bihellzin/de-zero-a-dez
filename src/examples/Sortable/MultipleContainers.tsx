@@ -83,7 +83,7 @@ function DroppableContainer({
     ? (id === over.id && active?.data.current?.type !== "container") ||
       items.includes(over.id)
     : false;
-
+  // console.log("DroppableContainer", children);
   return (
     <Container
       ref={disabled ? undefined : setNodeRef}
@@ -119,7 +119,8 @@ const dropAnimation: DropAnimation = {
   }),
 };
 
-type Items = Record<UniqueIdentifier, UniqueIdentifier[]>;
+type Items = any;
+// type Items = Record<UniqueIdentifier, UniqueIdentifier[]>;
 
 interface Props {
   adjustScale?: boolean;
@@ -177,23 +178,25 @@ export function MultipleContainers({
   const [items, setItems] = useState<Items>(
     () =>
       initialItems ?? {
-        0: createRange(0, (index) => `0-${index + 1}`),
-        1: createRange(0, (index) => `1-${index + 1}`),
-        2: createRange(0, (index) => `2-${index + 1}`),
-        3: createRange(0, (index) => `3-${index + 1}`),
-        4: createRange(0, (index) => `4-${index + 1}`),
-        5: createRange(0, (index) => `5-${index + 1}`),
-        6: createRange(0, (index) => `6-${index + 1}`),
-        7: createRange(0, (index) => `7-${index + 1}`),
-        8: createRange(0, (index) => `8-${index + 1}`),
-        9: createRange(0, (index) => `9-${index + 1}`),
-        10: createRange(0, (index) => `10-${index + 1}`),
-        root: createRange(5, (index) => `root-${index + 1}`),
+        0: [{ playerName: "antonio" }],
+        1: [{ playerName: "antonio" }],
+        2: [{ playerName: "antonio" }],
+        3: [{ playerName: "antonio" }],
+        4: [{ playerName: "antonio" }],
+        5: [{ playerName: "antonio" }],
+        6: [{ playerName: "antonio" }],
+        7: [{ playerName: "antonio" }],
+        8: [{ playerName: "antonio" }],
+        9: [{ playerName: "antonio" }],
+        10: [{ playerName: "antonio" }],
+        root: [{ playerName: "antonio" }],
       }
   );
+  console.log(items);
   const [containers, setContainers] = useState(
     Object.keys(items) as UniqueIdentifier[]
   );
+  console.log(containers);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const lastOverId = useRef<UniqueIdentifier | null>(null);
   const recentlyMovedToNewContainer = useRef(false);
@@ -486,22 +489,25 @@ export function MultipleContainers({
               unstyled={minimal}
             >
               <SortableContext items={items[containerId]} strategy={strategy}>
-                {items[containerId].map((value, index) => {
-                  return (
-                    <SortableItem
-                      disabled={isSortingContainer}
-                      key={value}
-                      id={value}
-                      index={index}
-                      handle={handle}
-                      style={getItemStyles}
-                      wrapperStyle={wrapperStyle}
-                      renderItem={renderItem}
-                      containerId={containerId}
-                      getIndex={getIndex}
-                    />
-                  );
-                })}
+                {items[containerId].map(
+                  ({ playerName, backgroundImage }, index) => {
+                    return (
+                      <SortableItem
+                        disabled={isSortingContainer}
+                        key={`${playerName}-${containerId}-${index}`}
+                        id={`${playerName}-${containerId}-${index}`}
+                        index={index}
+                        handle={handle}
+                        style={getItemStyles}
+                        wrapperStyle={wrapperStyle}
+                        renderItem={renderItem}
+                        containerId={containerId}
+                        getIndex={getIndex}
+                        backgroundImage={backgroundImage}
+                      />
+                    );
+                  }
+                )}
               </SortableContext>
             </DroppableContainer>
           ))}
@@ -531,12 +537,12 @@ export function MultipleContainers({
           handleItems={setItems}
         >
           <SortableContext items={items["root"]} strategy={strategy}>
-            {items["root"].map((value, index) => {
+            {items["root"].map(({ playerName, backgroundImage }, index) => {
               return (
                 <SortableItem
                   disabled={isSortingContainer}
-                  key={value}
-                  id={value}
+                  key={playerName}
+                  id={playerName}
                   index={index}
                   handle={handle}
                   style={getItemStyles}
@@ -544,6 +550,7 @@ export function MultipleContainers({
                   renderItem={renderItem}
                   containerId={"root"}
                   getIndex={getIndex}
+                  backgroundImage={backgroundImage}
                 />
               );
             })}
@@ -692,6 +699,7 @@ function Trash({ id }: { id: UniqueIdentifier }) {
 }
 
 interface SortableItemProps {
+  backgroundImage?: any;
   containerId: UniqueIdentifier;
   id: UniqueIdentifier;
   index: number;
@@ -704,6 +712,7 @@ interface SortableItemProps {
 }
 
 function SortableItem({
+  backgroundImage,
   disabled,
   id,
   index,
@@ -754,6 +763,7 @@ function SortableItem({
       fadeIn={mountedWhileDragging}
       listeners={listeners}
       renderItem={renderItem}
+      backgroundImage={backgroundImage}
     />
   );
 }

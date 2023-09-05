@@ -13,6 +13,7 @@ import { Handle, Remove } from "./components";
 import styles from "./Item.module.scss";
 
 export interface Props {
+  backgroundImage?: string;
   dragOverlay?: boolean;
   color?: string;
   disabled?: boolean;
@@ -29,7 +30,6 @@ export interface Props {
   transition?: string | null;
   wrapperStyle?: React.CSSProperties;
   value: React.ReactNode;
-  backgroundImage?: string;
   onRemove?(): void;
   renderItem?(args: {
     dragOverlay: boolean;
@@ -50,6 +50,7 @@ export const Item = React.memo(
   React.forwardRef<HTMLLIElement, Props>(
     (
       {
+        backgroundImage,
         color,
         dragOverlay,
         dragging,
@@ -141,7 +142,9 @@ export const Item = React.memo(
             )}
             style={{
               ...style,
-              backgroundImage: `url(${Dinamite})`,
+              backgroundImage: backgroundImage
+                ? `url(${backgroundImage})`
+                : undefined,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               height: 100,

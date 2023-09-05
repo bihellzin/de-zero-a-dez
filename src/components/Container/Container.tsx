@@ -5,7 +5,7 @@ import { MdAdd } from "react-icons/md";
 import { Handle, Remove } from "../Item";
 
 import styles from "./Container.module.scss";
-import { Button, Modal } from "antd";
+import { Button, Input, Modal } from "antd";
 
 export interface Props {
   addItems?: boolean;
@@ -51,7 +51,9 @@ export const Container = forwardRef<HTMLDivElement, Props>(
   ) => {
     const Component = onClick ? "button" : "div";
     const [isOpenModal, setIsOpenModal] = useState(false);
-
+    const [image, setImage] = useState<string | undefined>();
+    const [playerName, setPlayerName] = useState<string | undefined>();
+    // console.log("Container", children);
     return (
       <>
         <Component
@@ -103,16 +105,39 @@ export const Container = forwardRef<HTMLDivElement, Props>(
           onOk={() =>
             handleItems &&
             handleItems((prev) => {
-              console.log(prev[id]);
-              return {
+              console.log(playerName, image);
+              const newValue = {
                 ...prev,
-                [id]: [...prev[id], `${prev[id][0] + Math.random()}`],
+                [id]: [
+                  ...prev[id],
+                  {
+                    backgroundImage: URL.createObjectURL(image),
+                    playerName,
+                  },
+                ],
               };
+              setImage(undefined);
+              setPlayerName(undefined);
+              return newValue;
             })
           }
           onCancel={() => setIsOpenModal((prev) => !prev)}
           closable={true}
-        ></Modal>
+          title={"Adicionar"}
+        >
+          <Input
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            type={"text"}
+            required={true}
+          />
+          <Input
+            type={"file"}
+            accept="image/*"
+            required={true}
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+        </Modal>
       </>
     );
   }
